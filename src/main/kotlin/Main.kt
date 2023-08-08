@@ -1,7 +1,34 @@
-fun main(args: Array<String>) {
-    println("Hello World!")
+import kotlin.random.Random
 
-    // Try adding program arguments via Run/Debug configuration.
-    // Learn more about running applications: https://www.jetbrains.com/help/idea/running-applications.html.
-    println("Program arguments: ${args.joinToString()}")
+class Start {
+    val wordList = WordList().wordList
+
+    fun start() {
+        var wordNew = getNewWord()
+        var thisWord = GuessWord(wordNew)
+        thisWord.wordinfo()
+    }
+    fun getNewWord(): String {
+        var randomIndex = Random.nextInt(wordList.size)
+        var getNewWord = wordList[randomIndex]
+        return getNewWord
+    }
+
 }
+
+class GuessWord(val word: String) {
+    private val wordLenght = word.length
+    private var wordHidden = '_'.toString().repeat(wordLenght)
+
+
+
+    fun wordinfo() {
+        print("$word $wordLenght $wordHidden")
+    }
+
+}
+fun main() {
+    val start = Start()
+    start.start()
+}
+
