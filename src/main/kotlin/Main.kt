@@ -2,20 +2,19 @@ import kotlin.random.Random
 import kotlin.math.floor
 
 class Start {
-    val wordList = WordList().wordList
+    private val wordList = WordList().wordList
 
     fun start() {
         println("Starting game...")
         while (true) {
-            var wordNew = getNewWord()
-            var thisWord = GuessWord(wordNew)
+            val wordNew = getNewWord()
+            val thisWord = GuessWord(wordNew)
             var guessLeft = thisWord.returnGuessLeft()
-            val guessInit = thisWord.returnGuessInit()
             var wordProg = thisWord.returnWordHidden()
             var containsUnderscore = wordProg.contains('_')
             while (guessLeft > 0) {
                 println("Word: $wordProg Guesses left: $guessLeft Guess character:")
-                var inputUser = readLine()
+                val inputUser = readLine()
                 var inputChar: Char? = null
                 if (inputUser == "reveal") {
                     println(thisWord.wordinfo())
@@ -33,27 +32,26 @@ class Start {
                 }
             }
             if (guessLeft == 0) {
-                println("You lost!")
+                println("You lost! The word was '$wordNew'")
             } else {
                 println("You won!")
             }
             println("New game (y/n)?")
-            var newgame = readLine()
+            val newgame = readLine()
             if (newgame != "y") {
                 break
             }
 
         }
     }
-    fun getNewWord(): String {
-        var randomIndex = Random.nextInt(wordList.size)
-        var getNewWord = wordList[randomIndex]
-        return getNewWord
+    private fun getNewWord(): String {
+        val randomIndex = Random.nextInt(wordList.size)
+        return wordList[randomIndex]
     }
 
 }
 
-class GuessWord(val word: String) {
+class GuessWord(private val word: String) {
     private val wordLenght = word.length
     private var wordHidden = '_'.toString().repeat(wordLenght)
     private val uniqueChars = mutableSetOf<Char>()
@@ -65,36 +63,28 @@ class GuessWord(val word: String) {
     }
     private val nbrLetters = uniqueChars.size
     private var guessLeft =  floor(nbrLetters.toDouble() / 3).toInt() + 2
-    private val guessInit = guessLeft
 
-    fun increaseGuessLeft() {
-        guessLeft += 1
-    }
-    fun returnGuessInit(): Int {
-        return guessInit
-    }
     fun returnGuessLeft(): Int {
         return guessLeft
     }
 
     fun wordinfo(): String {
-        var retString = "Help called -> Word: $word Guesses left: $guessLeft"
-        return retString
+        return "Help called -> Word: $word Guesses left: $guessLeft"
     }
 
     fun revealLetter(letter: Char) {
         var charIndex = word.indexOf(letter)
-        var wordHidden_ca = wordHidden.toCharArray()
+        val wordhiddenCa = wordHidden.toCharArray()
         if (charIndex == -1) {
             guessLeft -= 1
         }
         while (charIndex != -1) {
             if (charIndex >= 0) {
-                wordHidden_ca[charIndex] = letter
+                wordhiddenCa[charIndex] = letter
             }
             charIndex = word.indexOf(letter, charIndex + 1)
         }
-        wordHidden = String(wordHidden_ca)
+        wordHidden = String(wordhiddenCa)
     }
 
     fun returnWordHidden(): String {
